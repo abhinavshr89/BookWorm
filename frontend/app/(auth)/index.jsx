@@ -13,15 +13,16 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const{isLoading} = useAuthStore();
-  const handleLogin = () => {
-    setIsLoading(true);
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
-      alert("Login successful!");
-    }, 2000);
-  };
+
+  const {user, isLoading, login} = useAuthStore();  
+
+  const handleLogin = async () => {
+    const result = await login(email, password);
+    if(!result.success){
+        Alert.alert("Error", result.error);
+    }
+
+  };  
 
   return (
     <KeyboardAvoidingView
