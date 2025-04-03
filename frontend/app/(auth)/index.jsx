@@ -7,6 +7,7 @@ import COLORS from "../../constants/colors";
 import {Link} from "expo-router";
 import { Platform } from "react-native";
 import { useAuthStore } from "../../store/authStore";
+import { ActivityIndicator } from "react-native";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
