@@ -91,7 +91,6 @@ export default function Create() {
     try {
       setLoading(true);
       console.log(token);
-      
 
       // get file extension from URI or default to jpeg
       const uriParts = image.split(".");
@@ -99,7 +98,6 @@ export default function Create() {
       const imageType = fileType
         ? `image/${fileType.toLowerCase()}`
         : "image/jpeg";
-
 
       const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
 
@@ -117,15 +115,29 @@ export default function Create() {
         }),
       });
 
-      const data = await response.json();
+      const rawResponse = await response.text(); // Get raw response text
+      console.log("Raw Response:", rawResponse);
 
-      if(!response.ok) {
+      let data;
+      try {
+        data = JSON.parse(rawResponse); // Attempt to parse JSON
+      } catch (parseError) {
+        console.error("JSON Parse Error:", parseError);
+        Alert.alert("Error", "Unexpected server response. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      if (!response.ok) {
         Alert.alert("Error", data.message || "Failed to add book recommendation");
         setLoading(false);
         return;
       }
 
-      Alert.alert("Success","Your book recommendation has been added successfully!");
+      Alert.alert(
+        "Success",
+        "Your book recommendation has been added successfully!"
+      );
       setTitle("");
       setCaption("");
       setImage(null);
@@ -135,8 +147,7 @@ export default function Create() {
     } catch (error) {
       console.error("Error submitting form:", error);
       Alert.alert("Error", "Failed to add book recommendation. Please try again.");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -172,7 +183,7 @@ export default function Create() {
           <View style={styles.header}>
             <Text style={styles.title}>Add Book Recommendation</Text>
             <Text style={styles.subtitle}>
-              Share your favorited reads with othres
+              Share your favorited reads with others
             </Text>
           </View>
 
